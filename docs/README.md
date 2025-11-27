@@ -1,66 +1,88 @@
-
-
-```mermaid
-    classDiagram
-    class Drawable {
-        <<interface>>
-        +draw() String
-    }
+```mermaid 
+classDiagram
+class Drawable {
+<<interface>>
++draw() void
+}
 
     class Vehicle {
         <<abstract>>
         -id : int
-        -length : int
+        -length : double
+        +Vehicle()
+        +Vehicle(length)
         +getId() int
-        +getLength() int
+        +getLength() double
+        +toString() String
     }
-
+    
     class Locomotive {
-        -power : int
-        +getPower() int
-        +draw() String
+        -power : double
+        +Locomotive()
+        +Locomotive(length, power)
+        +getPower() double
+        +draw() void
+        +toString() String
     }
-
+    
     class TowedVehicle {
         <<abstract>>
+        +TowedVehicle()
+        +TowedVehicle(length)
     }
-
+    
     class Wagon {
-        -maxLoad : int
-        -currentLoad : int
-        +getMaxLoad() int
-        +getCurrentLoad() int
-        +setCurrentLoad(int)
-        +draw() String
+        -maxLoad : double
+        -currentLoad : double
+        +Wagon()
+        +Wagon(length, maxLoad)
+        +getMaxLoad() double
+        +getCurrentLoad() double
+        +setCurrentLoad(load) void
+        +draw() void
+        +toString() String
     }
-
-    class Car {
+    
+    class Carriage {
         -seats : int
         -passengers : int
+        +Carriage()
+        +Carriage(length, seats)
         +getSeats() int
         +getPassengers() int
-        +setPassengers(int)
-        +draw() String
+        +setPassengers(passengers) void
+        +draw() void
+        +toString() String
     }
-
+    
     class Train {
         -departure : String
         -destination : String
         -locomotive : Locomotive
-        -vehicles : List<TowedVehicle>
-        +addLocomotive(...)
-        +removeLocomotive()
-        +addVehicle(...)
-        +removeVehicle(...)
-        +draw() String
+        -vehicles : List~TowedVehicle~
+        +Train()
+        +Train(locomotive)
+        +addLocomotive(locomotive) void
+        +removeLocomotive() void
+        +addVehicle(vehicle) void
+        +removeVehicle(index) void
+        +draw() void
+        +toString() String
     }
-
-    Drawable <|.. Vehicle
+    
+    %% Héritage
     Vehicle <|-- Locomotive
     Vehicle <|-- TowedVehicle
     TowedVehicle <|-- Wagon
-    TowedVehicle <|-- Car
-
-    Train --> Locomotive : contains
-    Train --> TowedVehicle : contains many
+    TowedVehicle <|-- Carriage
+    
+    %% Implémentation interface
+    Drawable <|.. Locomotive
+    Drawable <|.. Wagon
+    Drawable <|.. Carriage
+    Drawable <|.. Train
+    
+    %% Composition avec multiplicités
+    Train *-- "1" Locomotive
+    Train *-- "0..*" TowedVehicle
 ```
